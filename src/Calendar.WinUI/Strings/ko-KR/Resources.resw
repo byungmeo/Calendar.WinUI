@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="MoreFormat" xml:space="preserve"><value>{0}개 더보기</value></data>
+  <data name="Today" xml:space="preserve"><value>오늘</value></data>
+  <data name="Selected" xml:space="preserve"><value>선택됨</value></data>
+</root>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Subtitle" xml:space="preserve"><value>Month calendar · Multi-day events · Application-owned interactions</value></data>
+  <data name="Previous" xml:space="preserve"><value>Previous</value></data>
+  <data name="Today" xml:space="preserve"><value>Today</value></data>
+  <data name="Next" xml:space="preserve"><value>Next</value></data>
+  <data name="Add" xml:space="preserve"><value>Add event</value></data>
+  <data name="Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="CustomTemplate" xml:space="preserve"><value>Custom template</value></data>
+  <data name="DarkTheme" xml:space="preserve"><value>Dark theme</value></data>
+  <data name="DateSelection" xml:space="preserve"><value>Date selection</value></data>
+  <data name="EventSelection" xml:space="preserve"><value>Event selection</value></data>
+  <data name="EventInvocation" xml:space="preserve"><value>Event invocation</value></data>
+  <data name="TimeZone" xml:space="preserve"><value>Time zone (UTC offset)</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="System" xml:space="preserve"><value>System</value></data>
+  <data name="On" xml:space="preserve"><value>On</value></data>
+  <data name="Off" xml:space="preserve"><value>Off</value></data>
+  <data name="InitialStatus" xml:space="preserve"><value>Select a date, event, or more.</value></data>
+  <data name="None" xml:space="preserve"><value>(none)</value></data>
+  <data name="AddedStatus" xml:space="preserve"><value>Added: {0:yyyy-MM-dd}; total={1}</value></data>
+  <data name="TemplateStatus" xml:space="preserve"><value>TemplateAction: {0}; dates={1}; events={2}</value></data>
+  <data name="DateStatus" xml:space="preserve"><value>Date: {0:yyyy-MM-dd}; outside={1}; dates={2}; events={3}</value></data>
+  <data name="DateSelectionStatus" xml:space="preserve"><value>Selected date: {0}; dates={1}; events={2}</value></data>
+  <data name="EventStatus" xml:space="preserve"><value>Event: {0}; date={1:yyyy-MM-dd}; outside={2}; dates={3}; events={4}</value></data>
+  <data name="SelectedEventStatus" xml:space="preserve"><value>Selected event: {0}; changes={1}</value></data>
+  <data name="MoreStatus" xml:space="preserve"><value>More: {0:yyyy-MM-dd}; all={1}; outside={2}; dates={3}; events={4}</value></data>
+  <data name="Range" xml:space="preserve"><value>Month {0:yyyy-MM-dd} ~ {1:yyyy-MM-dd} (end exclusive) · Visible {2:yyyy-MM-dd} ~ {3:yyyy-MM-dd}</value></data>
+  <data name="TimeZoneStatus" xml:space="preserve"><value>Time zone: {0}</value></data>
+</root>

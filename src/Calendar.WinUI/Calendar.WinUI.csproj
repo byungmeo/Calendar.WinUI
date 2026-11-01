@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>Calendar.WinUI</RootNamespace>
+    <PackageId>Byungmeo.Calendar.WinUI</PackageId>
+    <UseWinUI>true</UseWinUI>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <Platforms>x64;ARM64;x86</Platforms>
+    <Platform Condition="'$(Platform)' == '' or '$(Platform)' == 'AnyCPU'">x64</Platform>
+    <!-- This is a managed NuGet library, not an executable. The consuming app selects its native architecture. -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Description>Extensible WinUI 3 month calendar with multi-day events and developer-owned interaction.</Description>
+    <PackageTags>WinUI;WinUI3;WindowsAppSDK;calendar;controls;XAML;events</PackageTags>
+    <PackageReleaseNotes>Initial alpha release with automatic five/six-week month layouts, multi-day events, overflow indicators, independent selection and invocation, custom templates and styles, and system-default language/time-zone settings.</PackageReleaseNotes>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeCalendarCoreInPackage</TargetsForTfmSpecificBuildOutput>
+    <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);IncludeCalendarCoreInPackage</TargetsForTfmSpecificDebugSymbolsInPackage>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Calendar.Core\Calendar.Core.csproj" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.4" />
+  </ItemGroup>
+  <!-- Keep Core as a separate assembly and ship its outputs inside the single public package. -->
+  <Target Name="IncludeCalendarCoreInPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <_BundledCalendarCore Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->WithMetadataValue('Filename', 'Calendar.Core'))" />
+    </ItemGroup>
+    <Error Condition="'@(_BundledCalendarCore)' == ''" Text="The Calendar.Core project output could not be resolved for packaging." />
+    <Error Condition="!Exists('%(_BundledCalendarCore.RootDir)%(_BundledCalendarCore.Directory)%(_BundledCalendarCore.Filename).xml')" Text="Calendar.Core XML documentation is missing. Build the library before packing." />
+    <Error Condition="'$(IncludeSymbols)' == 'true' and !Exists('%(_BundledCalendarCore.RootDir)%(_BundledCalendarCore.Directory)%(_BundledCalendarCore.Filename).pdb')" Text="Calendar.Core debugging symbols are missing. Build the library before packing." />
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(_BundledCalendarCore)" />
+      <BuildOutputInPackage Include="@(_BundledCalendarCore->'%(RootDir)%(Directory)%(Filename).xml')" />
+      <TfmSpecificDebugSymbolsFile Include="@(_BundledCalendarCore->'%(RootDir)%(Directory)%(Filename).pdb')" Condition="'$(IncludeSymbols)' == 'true'">
+        <TargetFramework>$(TargetFramework)</TargetFramework>
+        <TargetPath>Calendar.Core.pdb</TargetPath>
+      </TfmSpecificDebugSymbolsFile>
+    </ItemGroup>
+  </Target>
+</Project>

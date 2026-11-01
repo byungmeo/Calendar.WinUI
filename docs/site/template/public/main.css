@@ -1,0 +1,14 @@
+:root {
+  --bs-font-sans-serif: "Segoe UI", system-ui, sans-serif;
+}
+body { font-size: 15px; line-height: 1.75; }
+.navbar-brand { font-size: 1.06rem; font-weight: 650; letter-spacing: -.025em; }
+.navbar-brand img { display: none; }
+#navbar .icons > .dropdown { display: none; }
+article h1 { font-size: 2rem; font-weight: 600; letter-spacing: -.035em; margin-bottom: 1.5rem; }
+article h2 { font-size: 1.4rem; font-weight: 600; margin-top: 2.5rem; }
+article h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.75rem; }
+article p, article li { max-width: 80ch; }
+article pre { border-radius: 4px; }
+article table { font-size: .93rem; }
+footer { font-size: .8rem; }

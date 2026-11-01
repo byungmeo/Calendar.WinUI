@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Calendar.Core/Calendar.Core.csproj" />
+    <Project Path="src/Calendar.Core.Tests/Calendar.Core.Tests.csproj" />
+    <Project Path="src/Calendar.WinUI/Calendar.WinUI.csproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/Calendar.Example/Calendar.Example.csproj">
+      <Platform Project="x64" />
+      <Deploy />
+    </Project>
+  </Folder>
+</Solution>

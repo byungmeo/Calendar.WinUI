@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [{
+    "src": [{
+      "src": "../../",
+      "files": ["src/Calendar.Core/Calendar.Core.csproj", "src/Calendar.WinUI/Calendar.WinUI.csproj"]
+    }],
+    "dest": "api",
+    "sourceLinkExclude": ["**/Calendar.Rendering.cs", "**/Calendar.Data.cs", "**/Calendar.Selection.cs", "**/Calendar.Styling.cs"],
+    "properties": {
+      "Configuration": "Release",
+      "Platform": "x64",
+      "EnableWinUIDesignTimeGeneratedXamlCompileItems": "false"
+    },
+    "namespaceLayout": "flattened",
+    "memberLayout": "samePage"
+  }],
+  "build": {
+    "content": [{ "files": ["index.md", "toc.yml", "docs/**.md", "docs/toc.yml", "api/**.yml"] }],
+    "resource": [{ "files": ["assets/**", ".nojekyll"] }],
+    "dest": "../../artifacts/docs-site",
+    "template": ["default", "modern", "template"],
+    "globalMetadata": {
+      "_appName": "Calendar.WinUI",
+      "_appTitle": "Calendar.WinUI",
+      "_appLogoPath": "",
+      "_appFaviconPath": "assets/favicon.svg",
+      "_appFooter": "Calendar.WinUI",
+      "_lang": "en",
+      "_enableSearch": true,
+      "_disableNextArticle": true,
+      "_disableContribution": true,
+      "_gitContribute": { "repo": "https://github.com/byungmeo/Calendar.WinUI", "branch": "master" }
+    }
+  }
+}

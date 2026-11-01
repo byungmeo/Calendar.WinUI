@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="MoreFormat" xml:space="preserve"><value>+{0} more</value></data>
+  <data name="Today" xml:space="preserve"><value>Today</value></data>
+  <data name="Selected" xml:space="preserve"><value>Selected</value></data>
+</root>

@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+.vs/
+.tools/
+artifacts/
+docs/site/api/
+docs/site/obj/
+docs/site/.cache/
+*.user
