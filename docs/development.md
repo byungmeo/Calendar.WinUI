@@ -50,7 +50,13 @@ dotnet test src/Calendar.Core.Tests/Calendar.Core.Tests.csproj
 ./scripts/verify-package.ps1
 ```
 
-`verify-package.ps1` creates the local packages, builds the same example on .NET 8, 9, and 10, launches each actual application, and checks runtime versions, API regression groups, and date/event/overflow interactions. It verifies that the example has no project references. There is no separate consumer project.
+`verify-package.ps1` creates the local packages and tests six x64 combinations: .NET 8, 9, and 10 with Windows App SDK 2.0.1 and 2.6.4. It launches each actual application and checks resolved SDK versions, API regression groups, and date/event/overflow interactions. The apps include their Windows App SDK runtime so a newer machine-wide installation cannot hide a compatibility issue. The script verifies that the loaded native WinUI DLL comes from the app layout and its SHA-256 matches the selected runtime package. It also verifies that the example has no project references. There is no separate consumer project.
+
+The library builds against the minimum supported Windows App SDK, 2.0.1. The example defaults to 2.6.4; override `ExampleWindowsAppSdkVersion` to test another version. To run only the minimum SDK with .NET 10:
+
+```powershell
+./scripts/verify-package.ps1 -WindowsAppSdkVersions 2.0.1 -NetVersions 10.0
+```
 
 Package checks and UI diagnostics live in `samples/Calendar.Example/MainWindow.PackageChecks.cs` and `MainWindow.Diagnostics.cs` and are compiled only with `EnablePackageChecks=true` or `EnableUiDiagnostics=true`. These modes use a fixed reference month and add test status text and an event-invocation switch. Normal example builds show the current month with events in the previous, current, and next months, without diagnostic UI. To run the API checks manually:
 

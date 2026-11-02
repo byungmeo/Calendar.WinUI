@@ -7,7 +7,7 @@ An extensible month calendar control for WinUI 3.
 
 Display all-day, timed, and multi-day events with automatic five/six-week layouts, overflow indicators, custom templates, and independent date/event selection. Your application owns navigation, editing, storage, and service integration.
 
-**Status:** Early development. Month view only. Supports .NET 8, 9, and 10 applications.
+**Status:** Early development. Month view only. Supports .NET 8, 9, and 10 applications with Windows App SDK 2.0.1 or later.
 
 The [`Byungmeo.Calendar.WinUI`](https://www.nuget.org/packages/Byungmeo.Calendar.WinUI/) NuGet package includes the control and Core APIs.
 

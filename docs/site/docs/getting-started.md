@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Start with a WinUI 3 application. The package targets `net8.0-windows10.0.19041.0`, with consuming applications tested on .NET 8, 9, and 10. Building this repository requires the SDK specified in `global.json`.
+Start with a WinUI 3 application using Windows App SDK 2.0.1 or later. The package targets `net8.0-windows10.0.19041.0`, with consuming applications tested on .NET 8, 9, and 10. Building this repository requires the SDK specified in `global.json`.
 
 The current package version is `0.2.0`. These instructions use a local package feed and do not assume publication to NuGet.org.
 

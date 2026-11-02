@@ -40,6 +40,10 @@ foreach ($id in @('Byungmeo.Calendar.WinUI')) {
         $dependencies = @($metadata.dependencies.group.dependency)
         if (@($dependencies | Where-Object id -eq 'Calendar.Core').Count) { throw 'Core must be bundled, not declared as a separate package dependency.' }
         if (@($dependencies | Where-Object id -eq 'Microsoft.Windows.SDK.BuildTools').Count) { throw 'Build-only tools must not be runtime package dependencies.' }
+        $appSdkDependency = @($dependencies | Where-Object id -eq 'Microsoft.WindowsAppSDK')
+        if ($appSdkDependency.Count -ne 1 -or $appSdkDependency[0].version -notin @('2.0.1', '[2.0.1,)')) {
+            throw 'The public Windows App SDK dependency must allow 2.0.1 and later.'
+        }
         $assemblyEntries = @($archive.Entries | Where-Object FullName -match '^lib/[^/]+/Calendar\.(Core|WinUI)\.dll$')
         if ($assemblyEntries.Count -ne 2) { throw 'The package must contain both Calendar assemblies in its lib assets.' }
         if (@($assemblyEntries | ForEach-Object { [IO.Path]::GetDirectoryName($_.FullName) } | Select-Object -Unique).Count -ne 1) {
@@ -83,7 +87,7 @@ foreach ($id in @('Byungmeo.Calendar.WinUI')) {
             if (-not $pdbText.Contains($sourceUrl)) { throw "$pdbPath is missing its commit-specific Source Link mapping." }
         }
     } finally { $symbols.Dispose() }
-    $metadataResults += [pscustomobject]@{ id=$id; version=$Version; metadata='PASS'; readme='PASS'; license='MIT'; bundledAssemblies=@('Calendar.WinUI','Calendar.Core'); anyCpu=$true; separateCoreDependency=$false; portablePdb=$true; sourceLink=$true; package=$packageFile; symbols=$symbolFile }
+    $metadataResults += [pscustomobject]@{ id=$id; version=$Version; metadata='PASS'; readme='PASS'; license='MIT'; bundledAssemblies=@('Calendar.WinUI','Calendar.Core'); anyCpu=$true; separateCoreDependency=$false; windowsAppSdkMinimum='2.0.1'; portablePdb=$true; sourceLink=$true; package=$packageFile; symbols=$symbolFile }
 }
 $metadataResults | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $metadataRoot 'artifacts/package-metadata-verification.json')
 $metadataResults | Format-Table id,version,metadata,readme,license,portablePdb,sourceLink

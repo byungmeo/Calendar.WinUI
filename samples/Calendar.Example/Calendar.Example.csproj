@@ -16,6 +16,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
     <CalendarPackageVersion Condition="'$(CalendarPackageVersion)' == ''">$(Version)</CalendarPackageVersion>
+    <ExampleWindowsAppSdkVersion Condition="'$(ExampleWindowsAppSdkVersion)' == ''">2.6.4</ExampleWindowsAppSdkVersion>
     <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(MSBuildThisFileDirectory)..\..\artifacts\packages</RestoreAdditionalProjectSources>
     <RestorePackagesPath Condition="'$(RestorePackagesPath)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\nuget\example</RestorePackagesPath>
     <DefineConstants Condition="'$(EnablePackageChecks)' == 'true' or '$(EnableUiDiagnostics)' == 'true'">$(DefineConstants);CALENDAR_PACKAGE_CHECKS</DefineConstants>
@@ -50,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.4" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="[$(ExampleWindowsAppSdkVersion)]" />
   </ItemGroup>
 
   <!--
