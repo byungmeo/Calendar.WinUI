@@ -6,7 +6,7 @@ Display all-day, timed, and multi-day events with automatic five/six-week layout
 
 **Status:** Early development. Month view only. Supports .NET 8, 9, and 10 applications.
 
-The `Byungmeo.Calendar.WinUI` NuGet package includes the control and Core APIs.
+The [`Byungmeo.Calendar.WinUI`](https://www.nuget.org/packages/Byungmeo.Calendar.WinUI/) NuGet package includes the control and Core APIs.
 
 ## Documentation
 
