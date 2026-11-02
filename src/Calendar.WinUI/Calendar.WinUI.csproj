@@ -14,7 +14,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Description>Extensible WinUI 3 month calendar with multi-day events and developer-owned interaction.</Description>
     <PackageTags>WinUI;WinUI3;WindowsAppSDK;calendar;controls;XAML;events</PackageTags>
-    <PackageReleaseNotes>Reduced event-refresh allocations, bounded event-style caching, improved options subscription lifetime, and reduced retained buffer capacity after large data reductions.</PackageReleaseNotes>
+    <PackageReleaseNotes>Lowered the minimum Windows App SDK dependency to 2.0.1, with compatibility verified on .NET 8, 9, and 10 using Windows App SDK 2.0.1 and 2.6.4.</PackageReleaseNotes>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeCalendarCoreInPackage</TargetsForTfmSpecificBuildOutput>
     <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);IncludeCalendarCoreInPackage</TargetsForTfmSpecificDebugSymbolsInPackage>
   </PropertyGroup>

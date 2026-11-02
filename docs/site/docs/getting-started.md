@@ -4,7 +4,7 @@
 
 Start with a WinUI 3 application using Windows App SDK 2.0.1 or later. The package targets `net8.0-windows10.0.19041.0`, with consuming applications tested on .NET 8, 9, and 10. Building this repository requires the SDK specified in `global.json`.
 
-The current package version is `0.2.0`. These instructions use a local package feed and do not assume publication to NuGet.org.
+The current package version is `0.2.1`. These instructions use a local package feed and do not assume publication to NuGet.org.
 
 ## Install the package
 
@@ -25,7 +25,7 @@ Add the local feed to your application's `.csproj`, keeping its existing NuGet s
 From the application project directory, install `Byungmeo.Calendar.WinUI`. The package contains both the UI and Core assemblies; no separate Core package is needed. The namespaces remain `Calendar.WinUI` and `Calendar.Core`.
 
 ```powershell
-dotnet add package Byungmeo.Calendar.WinUI --version 0.2.0
+dotnet add package Byungmeo.Calendar.WinUI --version 0.2.1
 ```
 
 ## Add the control
