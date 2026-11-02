@@ -1,5 +1,8 @@
 # Calendar.WinUI
 
+<img width="1156" height="724" alt="image" src="https://github.com/user-attachments/assets/a4cee6d1-459d-4980-829b-c29624272830" />
+
+
 An extensible month calendar control for WinUI 3.
 
 Display all-day, timed, and multi-day events with automatic five/six-week layouts, overflow indicators, custom templates, and independent date/event selection. Your application owns navigation, editing, storage, and service integration.
