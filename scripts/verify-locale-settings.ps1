@@ -52,6 +52,7 @@ try {
     $mainWindow=@(UI @('list-windows','--json') | ConvertFrom-Json) | Where-Object title -eq 'Calendar Example' | Select-Object -First 1
     if(-not $mainWindow){throw 'Verified example window required.'}
     $script:mainHwnd=[string]$mainWindow.hwnd
+    UI @('wait-for','ApiRegressionStatus','--value','UI diagnostics: ready','-t','5000') | Out-Null
     UI @('wait-for','DisplayLanguage','-t','5000') | Out-Null
     Check 'Both settings initially use system defaults' {
         $script:initialSystemLabels=@{}

@@ -14,7 +14,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Description>Extensible WinUI 3 month calendar with multi-day events and developer-owned interaction.</Description>
     <PackageTags>WinUI;WinUI3;WindowsAppSDK;calendar;controls;XAML;events</PackageTags>
-    <PackageReleaseNotes>Initial alpha release with automatic five/six-week month layouts, multi-day events, overflow indicators, independent selection and invocation, custom templates and styles, and system-default language/time-zone settings.</PackageReleaseNotes>
+    <PackageReleaseNotes>Reduced event-refresh allocations, bounded event-style caching, improved options subscription lifetime, and reduced retained buffer capacity after large data reductions.</PackageReleaseNotes>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeCalendarCoreInPackage</TargetsForTfmSpecificBuildOutput>
     <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);IncludeCalendarCoreInPackage</TargetsForTfmSpecificDebugSymbolsInPackage>
   </PropertyGroup>

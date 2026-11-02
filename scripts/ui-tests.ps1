@@ -35,6 +35,7 @@ try {
     $main = $windows | Where-Object {$_.title -eq 'Calendar Example'} | Select-Object -First 1
     if (-not $main) { throw 'No live Calendar Example window.' }
     $script:hwnd = [string]$main.hwnd
+    UI @('wait-for','ApiRegressionStatus','--value','UI diagnostics: ready','-t','5000') | Out-Null
     $languageCombo = UI @('search','DisplayLanguage','--json') | ConvertFrom-Json
     UI @('invoke', $languageCombo.matches[0].selector,'--action','expand') | Out-Null
     $languageMatch = UI @('search','LanguageEnglish','--json') | ConvertFrom-Json
@@ -84,7 +85,7 @@ try {
     }
     Test-UI 'Custom application model adapter' {
         UI @('invoke','CalendarEvent_2_12')
-        Expect '앱 고유 모델'
+        Expect 'Custom application model'
         Expect 'dates=0; events=3'
     }
     Test-UI 'Arrow keys immediately select relative to the selected date without invocation' {
@@ -223,7 +224,7 @@ public static class CalendarUiWindow {
         UI @('invoke','EventInvocation','--action','toggle-off')
         UI @('invoke','CalendarEvent_4_1')
         Expect 'Reset'
-        UI @('wait-for','EventSelectionStatus','--value','Selected event: 기간 이벤트: 다음 달까지; changes=1','-t','3000')
+        UI @('wait-for','EventSelectionStatus','--value','Selected event: Multi-day event: into next month; changes=1','-t','3000')
         UI @('invoke','EventInvocation','--action','toggle-on')
     }
     Test-UI 'Event selection persists independently of focus and repeated invocation' {
@@ -232,7 +233,7 @@ public static class CalendarUiWindow {
         UI @('invoke','DarkTheme','--action','toggle-off')
         UI @('invoke','DateSelection','--action','toggle-on')
         UI @('invoke','CalendarEvent_4_1')
-        UI @('wait-for','EventSelectionStatus','--value','Selected event: 기간 이벤트: 다음 달까지; changes=1','-t','3000')
+        UI @('wait-for','EventSelectionStatus','--value','Selected event: Multi-day event: into next month; changes=1','-t','3000')
         UI @('invoke','CalendarDate_2026-10-10')
         UI @('focus','CalendarDate_2026-10-10')
         UI @('wait-for','CalendarEvent_4_1','-p','HelpText','--value','Selected','-t','3000')
@@ -240,7 +241,7 @@ public static class CalendarUiWindow {
         UI @('invoke','CalendarEvent_4_1')
         UI @('wait-for','EventSelectionStatus','--value','changes=1','--contains','-t','3000')
         UI @('invoke','CalendarEvent_4_2')
-        UI @('wait-for','EventSelectionStatus','--value','Selected event: 출시 준비; changes=2','-t','3000')
+        UI @('wait-for','EventSelectionStatus','--value','Selected event: Release preparation; changes=2','-t','3000')
     }
     Test-UI 'Light hover keeps event colors and does not create a tooltip' {
         UI @('hover','CalendarEvent_4_2','--dwell-time','1600')
@@ -251,7 +252,7 @@ public static class CalendarUiWindow {
     Test-UI 'Keyboard selection and theme changes preserve the selected occurrence' {
         UI @('focus','CalendarEvent_4_1')
         UI @('send-keys','enter','--via','send-input')
-        UI @('wait-for','EventSelectionStatus','--value','Selected event: 기간 이벤트: 다음 달까지; changes=3','-t','3000')
+        UI @('wait-for','EventSelectionStatus','--value','Selected event: Multi-day event: into next month; changes=3','-t','3000')
         Screenshot '12-event-keyboard-selected.png'
         UI @('invoke','DarkTheme','--action','toggle-on')
         UI @('hover','CalendarEvent_4_1','--dwell-time','1600')
@@ -264,7 +265,7 @@ public static class CalendarUiWindow {
         UI @('invoke','PreviousMonth')
         UI @('wait-for','CalendarEvent_4_1','-p','HelpText','--value','Selected','-t','3000')
         UI @('invoke','AddEvent')
-        UI @('wait-for','EventSelectionStatus','--value','Selected event: 기간 이벤트: 다음 달까지; changes=3','-t','3000')
+        UI @('wait-for','EventSelectionStatus','--value','Selected event: Multi-day event: into next month; changes=3','-t','3000')
         UI @('wait-for','CalendarEvent_4_1','-p','HelpText','--value','Selected','-t','3000')
     }
 } catch { $results.Add(@{name='Setup';status='FAIL';detail="$_"}) }

@@ -55,7 +55,6 @@ public sealed partial class MainWindow
         if (!_settingsReady) return;
         if (TimeZonePicker.SelectedItem is ComboBoxItem { Tag: TimeZoneInfo zone }) Board.DisplayTimeZone = zone;
         else Board.ClearValue(global::Calendar.WinUI.Controls.Calendar.DisplayTimeZoneProperty);
-        Status.Text = Text("TimeZoneStatus", TimeZonePicker.SelectedItem is ComboBoxItem item ? item.Content : null);
     }
 
     private void Language_Changed(object sender, SelectionChangedEventArgs e)
@@ -69,13 +68,11 @@ public sealed partial class MainWindow
         _uiCulture = string.IsNullOrEmpty(language) ? _systemUiCulture : CultureInfo.GetCultureInfo(language);
         Root.Language = _uiCulture.Name;
         Board.DisplayLanguage = string.IsNullOrEmpty(language) ? null : language;
-        Subtitle.Text = Text("Subtitle");
         PreviousButton.Content = Text("Previous"); TodayButton.Content = Text("Today"); NextButton.Content = Text("Next");
         AddButton.Content = Text("Add"); ResetButton.Content = Text("Reset");
         CustomTemplateToggle.Header = Text("CustomTemplate"); DarkToggle.Header = Text("DarkTheme");
         SelectionToggle.Header = Text("DateSelection"); EventSelectionToggle.Header = Text("EventSelection");
-        EventInvocationToggle.Header = Text("EventInvocation");
-        foreach (var toggle in new[] { CustomTemplateToggle, DarkToggle, SelectionToggle, EventSelectionToggle, EventInvocationToggle })
+        foreach (var toggle in new[] { CustomTemplateToggle, DarkToggle, SelectionToggle, EventSelectionToggle })
         {
             toggle.OnContent = Text("On"); toggle.OffContent = Text("Off");
         }
@@ -85,8 +82,7 @@ public sealed partial class MainWindow
         ((ComboBoxItem)LanguagePicker.Items[0]).Content = Text("System");
         RefreshSystemChoice(TimeZonePicker);
         RefreshSystemChoice(LanguagePicker);
-        Status.Text = Text("InitialStatus");
-        UpdateEventSelectionStatus(); UpdateTitle();
+        RefreshDiagnostics(); UpdateTitle();
     }
 
     private void RefreshSystemChoice(ComboBox picker)

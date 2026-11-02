@@ -27,6 +27,7 @@ public sealed partial class Calendar : Control
     private bool _loaded;
     private readonly HashSet<INotifyPropertyChanged> _observed = new(ReferenceEqualityComparer.Instance);
     private INotifyCollectionChanged? _collection;
+    private MonthViewOptions? _observedOptions;
     private IReadOnlyList<CalendarOccurrence> _occurrences = Array.Empty<CalendarOccurrence>();
     private readonly Dictionary<DateOnly, Button> _days = new();
     private readonly Dictionary<DateOnly, Border> _dayOutlines = new();
@@ -223,13 +224,19 @@ public sealed partial class Calendar : Control
     private static void OptionsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
         var c = (Calendar)sender;
-        if (e.OldValue is MonthViewOptions old) old.OptionsChanged -= c.OnOptionsChanged;
-        if (e.NewValue is MonthViewOptions next) next.OptionsChanged += c.OnOptionsChanged;
+        c.ObserveOptions(c._loaded ? e.NewValue as MonthViewOptions : null);
         c.NotifyRange();
         c._eventsDirty = true;
         c.QueueRender();
     }
     private void OnOptionsChanged(object? sender, EventArgs e) { _eventsDirty = true; QueueRender(); }
+    private void ObserveOptions(MonthViewOptions? options)
+    {
+        if (ReferenceEquals(_observedOptions, options)) return;
+        if (_observedOptions is not null) _observedOptions.OptionsChanged -= OnOptionsChanged;
+        _observedOptions = options;
+        if (_observedOptions is not null) _observedOptions.OptionsChanged += OnOptionsChanged;
+    }
 
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
@@ -248,6 +255,7 @@ public sealed partial class Calendar : Control
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         _loaded = true;
+        ObserveOptions(MonthOptions);
         InvalidateData(allItems: true);
         _today = CurrentDate();
         _todayTimer ??= DispatcherQueue.CreateTimer();
@@ -260,6 +268,7 @@ public sealed partial class Calendar : Control
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
         _loaded = false;
+        ObserveOptions(null);
         Unsubscribe();
         _allItemsDirty = _dataDirty = true;
         _todayTimer?.Stop();
@@ -298,6 +307,7 @@ public sealed partial class Calendar : Control
         _collection = null;
         foreach (var item in _observed) item.PropertyChanged -= ItemChanged;
         _observed.Clear();
+        _subscriptionsActive = false;
     }
     private MonthGrid? _grid;
     private MonthGrid CreateGrid()

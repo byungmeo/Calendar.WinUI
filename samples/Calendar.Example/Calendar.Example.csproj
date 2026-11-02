@@ -18,7 +18,8 @@
     <CalendarPackageVersion Condition="'$(CalendarPackageVersion)' == ''">$(Version)</CalendarPackageVersion>
     <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(MSBuildThisFileDirectory)..\..\artifacts\packages</RestoreAdditionalProjectSources>
     <RestorePackagesPath Condition="'$(RestorePackagesPath)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\nuget\example</RestorePackagesPath>
-    <DefineConstants Condition="'$(EnablePackageChecks)' == 'true'">$(DefineConstants);CALENDAR_PACKAGE_CHECKS</DefineConstants>
+    <DefineConstants Condition="'$(EnablePackageChecks)' == 'true' or '$(EnableUiDiagnostics)' == 'true'">$(DefineConstants);CALENDAR_PACKAGE_CHECKS</DefineConstants>
+    <DefineConstants Condition="'$(EnableUiDiagnostics)' == 'true'">$(DefineConstants);CALENDAR_UI_DIAGNOSTICS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

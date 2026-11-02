@@ -40,21 +40,18 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid ColumnSpacing="16">
+        <Grid Grid.Row="2" ColumnSpacing="16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackPanel>
-                <TextBlock
-                    x:Name="MonthTitle"
-                    AutomationProperties.AutomationId="MonthTitle"
-                    Style="{StaticResource TitleTextBlockStyle}"
-                    TextWrapping="NoWrap" />
-                <TextBlock x:Name="Subtitle" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
-            </StackPanel>
+            <TextBlock
+                x:Name="MonthTitle"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="MonthTitle"
+                Style="{StaticResource TitleTextBlockStyle}"
+                TextWrapping="NoWrap" />
             <StackPanel
                 Grid.Column="1"
                 VerticalAlignment="Center"
@@ -64,21 +61,20 @@
                     x:Name="PreviousButton"
                     AutomationProperties.AutomationId="PreviousMonth"
                     Click="Previous_Click"
-                    Content="이전" />
+                    Content="Previous" />
                 <Button
                     x:Name="TodayButton"
                     AutomationProperties.AutomationId="TodayMonth"
                     Click="Today_Click"
-                    Content="오늘" />
+                    Content="Today" />
                 <Button
                     x:Name="NextButton"
                     AutomationProperties.AutomationId="NextMonth"
                     Click="Next_Click"
-                    Content="다음" />
+                    Content="Next" />
             </StackPanel>
         </Grid>
         <StackPanel
-            Grid.Row="1"
             Orientation="Horizontal"
             Spacing="12">
             <Button
@@ -115,43 +111,19 @@
                 IsOn="True"
                 Toggled="EventSelection_Toggled" />
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12">
+        <StackPanel x:Name="DisplaySettingsPanel" Grid.Row="1" Orientation="Horizontal" Spacing="12">
             <ComboBox x:Name="TimeZonePicker" Width="240" Header="UTC 시간대" AutomationProperties.AutomationId="DisplayTimeZone" SelectionChanged="TimeZone_Changed" />
             <ComboBox x:Name="LanguagePicker" Width="180" Header="언어" AutomationProperties.AutomationId="DisplayLanguage" SelectionChanged="Language_Changed">
                 <ComboBoxItem Tag="" Content="시스템" AutomationProperties.AutomationId="LanguageSystem" />
                 <ComboBoxItem Tag="ko-KR" Content="한국어" AutomationProperties.AutomationId="LanguageKorean" />
                 <ComboBoxItem Tag="en-US" Content="English" AutomationProperties.AutomationId="LanguageEnglish" />
             </ComboBox>
-            <ToggleSwitch
-                x:Name="EventInvocationToggle"
-                MinWidth="110"
-                AutomationProperties.AutomationId="EventInvocation"
-                Header="Event invocation"
-                IsOn="True"
-                Toggled="EventInvocation_Toggled" />
         </StackPanel>
         <calendar:Calendar
             x:Name="Board"
             Grid.Row="3"
             AutomationProperties.AutomationId="Calendar"
-            DateInvoked="Date_Invoked"
             DisplayUnit="Month"
-            EventInvoked="Event_Invoked"
-            MoreInvoked="More_Invoked"
-            SelectedDateChanged="DateSelection_Changed"
-            SelectedEventChanged="EventSelection_Changed"
             VisibleRangeChanged="Range_Changed" />
-        <StackPanel x:Name="StatusPanel" Grid.Row="4" Spacing="4">
-            <TextBlock
-                x:Name="Status"
-                AutomationProperties.AutomationId="Status"
-                Text="날짜, 이벤트 또는 더보기를 선택하세요."
-                TextWrapping="Wrap" />
-            <TextBlock
-                x:Name="EventSelectionStatus"
-                AutomationProperties.AutomationId="EventSelectionStatus"
-                Text="Selected event: (none); changes=0" />
-            <TextBlock x:Name="RangeStatus" AutomationProperties.AutomationId="RangeStatus" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
-        </StackPanel>
     </Grid>
 </Window>

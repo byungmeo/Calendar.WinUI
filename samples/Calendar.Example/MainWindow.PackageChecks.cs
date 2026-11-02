@@ -24,6 +24,7 @@ public sealed partial class MainWindow
 
     private void InitializePackageChecks()
     {
+        InitializeDiagnostics();
         Require(Board.DisplayLanguage is null && Board.DisplayTimeZone.Id == TimeZoneInfo.Local.Id, "Calendar defaults must follow the system.");
         Require(Board.IsEventSelectionEnabled && Board.IsEventInvocationEnabled, "Event input defaults must be enabled.");
         AutomationProperties.SetAutomationId(ApiStatus, "ApiRegressionStatus");
@@ -32,7 +33,11 @@ public sealed partial class MainWindow
         StatusPanel.Children.Insert(0, runtime);
         StatusPanel.Children.Insert(0, ApiStatus);
         Board.VisibleRangeChanged += (_, e) => { _rangeChanges++; _lastOldRangeWasNull = e.OldRange is null; };
+#if CALENDAR_UI_DIAGNOSTICS
+        ApiStatus.Text = "UI diagnostics: ready";
+#else
         Board.Loaded += RunApiChecks;
+#endif
     }
 
     private static Style PackageCheckStyle() => (Style)XamlReader.Load("""
@@ -193,6 +198,56 @@ public sealed partial class MainWindow
             finally { Board.SelectedEventChanged -= changed; }
         });
 
+        await Check("failed refresh recovery and immutable overflow payloads", async () =>
+        {
+            var first = new Appointment("first", "Original title", TestDate);
+            var items = Enumerable.Range(1, 15).Select(i => new Appointment($"id-{i}", $"Event {i}", TestDate)).Prepend(first).ToList();
+            IReadOnlyList<CalendarOccurrence>? payload = null;
+            EventHandler<global::Calendar.WinUI.Interaction.CalendarMoreInvokedEventArgs> more = (_, args) => payload = args.Events;
+            Board.MoreInvoked += more;
+            try
+            {
+                Board.EventsSource = items;
+                Board.EventAdapter = CalendarEventAdapter.Create<Appointment>(model => CalendarEventData.AllDay(model.Date), model => model.Title, model => model.Id);
+                Board.RefreshEvents();
+                Board.SelectedItem = first;
+                await DrainUpdates();
+                var selected = Board.SelectedOccurrence;
+                Activate(Descendants(Board).OfType<Button>().Single(button => AutomationProperties.GetAutomationId(button) == "CalendarMore_2026-10-28"));
+                var originalPayload = payload ?? throw new InvalidOperationException("More did not provide the original snapshot.");
+                Require(originalPayload.Count == 16, "More did not return every occurrence.");
+                items.Add(new Appointment("first", "Duplicate key", TestDate));
+                var rejected = false;
+                try { Board.RefreshEvents(); }
+                catch (ArgumentException) { rejected = true; }
+                items.RemoveAt(items.Count - 1);
+                Require(rejected && ReferenceEquals(Board.SelectedOccurrence, selected), "Failed refresh changed valid selection or accepted duplicate keys.");
+                items[0] = new Appointment("first", "Replacement title", TestDate);
+                Board.RefreshEvents();
+                Board.RefreshEvents();
+                await DrainUpdates();
+                Require(ReferenceEquals(Board.SelectedItem, items[0]) && Board.SelectedOccurrence?.DisplayText == "Replacement title", "Refresh did not recover after invalid input.");
+                Require(originalPayload[0].DisplayText == "Original title" && ReferenceEquals(originalPayload[0].Source, first), "Buffer reuse changed an earlier public overflow snapshot.");
+                Activate(Descendants(Board).OfType<Button>().Single(button => AutomationProperties.GetAutomationId(button) == "CalendarMore_2026-10-28"));
+                Require(payload?[0].DisplayText == "Replacement title", "More retained the previous projection after recovery.");
+                items.Clear();
+                Board.RefreshEvents();
+                Require(Board.SelectedItem is null, "Clearing staged data retained selection.");
+                items.Add(first);
+                Board.RefreshEvents();
+                Board.SelectedItem = first;
+                Require(ReferenceEquals(Board.SelectedOccurrence?.Source, first), "A cleared key buffer affected later source data.");
+            }
+            finally
+            {
+                Board.MoreInvoked -= more;
+                Board.SelectedItem = null;
+                Board.EventsSource = Array.Empty<CalendarEvent>();
+                Board.EventAdapter = DefaultCalendarEventAdapter.Instance;
+            }
+            await DrainUpdates();
+        });
+
         await Check("date helpers and application minimum size", async () =>
         {
             Board.DisplayTimeZone = TimeZoneInfo.Utc;
@@ -240,6 +295,34 @@ public sealed partial class MainWindow
             Board.EventContainerStyle = null; Board.EventContainerStyleSelector = null;
             await DrainUpdates();
             Require(EventContainer().Padding.Left == 4, "Clearing custom styles did not restore the default.");
+        });
+
+        await Check("options replacement and unload reload", async () =>
+        {
+            var original = Board.MonthOptions;
+            var index = Root.Children.IndexOf(Board);
+            try
+            {
+                Board.MonthOptions = new MonthViewOptions { EventRowHeight = 24 };
+                await DrainUpdates();
+                var initialHeight = EventContainer().ActualHeight;
+                Root.Children.Remove(Board);
+                await DrainUpdates();
+                var replacement = new MonthViewOptions { EventRowHeight = 32 };
+                Board.MonthOptions = replacement;
+                Root.Children.Insert(index, Board);
+                await DrainUpdates();
+                Require(EventContainer().ActualHeight > initialHeight + 7, "Reload ignored options assigned while unloaded.");
+                replacement.EventRowHeight = 40;
+                await DrainUpdates();
+                Require(EventContainer().ActualHeight > initialHeight + 15, "Reload did not restore the options subscription.");
+            }
+            finally
+            {
+                if (!Root.Children.Contains(Board)) Root.Children.Insert(index, Board);
+                Board.MonthOptions = original;
+            }
+            await DrainUpdates();
         });
 
         await Check("independent selection invocation and nested actions", async () =>

@@ -171,6 +171,13 @@ public sealed partial class Calendar
 
     private void UpdateEvents(MonthLayout layout, int capacity)
     {
+        _activeContainerStyles.Clear();
+        try { UpdateEventVisuals(layout, capacity); }
+        finally { PruneContainerStyles(); }
+    }
+
+    private void UpdateEventVisuals(MonthLayout layout, int capacity)
+    {
         var primaryRange = layout.Grid.Range.PrimaryRange;
         var activeEvents = new HashSet<(int Week, int Source)>();
         var activeMore = new HashSet<DateOnly>();

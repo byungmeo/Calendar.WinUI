@@ -42,6 +42,7 @@ try {
     $main = @(UI @('list-windows','--json') | ConvertFrom-Json) | Where-Object {$_.title -eq 'Calendar Example'} | Select-Object -First 1
     if (-not $main) { throw 'Verified example window required.' }
     $script:hwnd = [string]$main.hwnd
+    UI @('wait-for','ApiRegressionStatus','--value','UI diagnostics: ready','-t','5000') | Out-Null
     $languageCombo = UI @('search','DisplayLanguage','--json') | ConvertFrom-Json
     UI @('invoke', $languageCombo.matches[0].selector,'--action','expand') | Out-Null
     $languageMatch = UI @('search','LanguageEnglish','--json') | ConvertFrom-Json
